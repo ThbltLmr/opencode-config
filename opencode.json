@@ -39,5 +39,8 @@
         "edit": "ask"
       }
     }
-  }
+  },
+  "plugin": [
+    "opencode-anthropic-auth@0.0.13"
+  ]
 }
