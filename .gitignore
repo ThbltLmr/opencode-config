@@ -1,0 +1,23 @@
+# Ignore opencode runtime state, caches, and the installed binary by default.
+*
+
+# Repository metadata and documentation.
+!.gitignore
+!README.md
+
+# Personal configuration and global instructions.
+!opencode.json
+!tui.json
+!AGENTS.md
+
+# Custom agents, commands, skills, plugins, and themes.
+!agent/
+!agent/**
+!command/
+!command/**
+!skill/
+!skill/**
+!plugin/
+!plugin/**
+!themes/
+!themes/**
