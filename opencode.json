@@ -3,7 +3,12 @@
   "model": "anthropic/claude-opus-5",
   "small_model": "anthropic/claude-haiku-4-5",
   "share": "disabled",
-  "instructions": ["~/.opencode/AGENTS.md"],
+  "disabled_providers": [
+    "amazon-bedrock"
+  ],
+  "instructions": [
+    "~/.opencode/AGENTS.md"
+  ],
   "permission": {
     "read": {
       "*": "allow",
