@@ -1,4 +1,4 @@
-# Ignore opencode runtime state, caches, and the installed binary by default.
+# Ignore opencode runtime state, caches, and dependencies by default.
 *
 
 # Repository metadata and documentation.
@@ -19,5 +19,7 @@
 !skill/**
 !plugin/
 !plugin/**
+!plugins/
+!plugins/**
 !themes/
 !themes/**
