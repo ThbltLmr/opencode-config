@@ -1,68 +1,51 @@
 # opencode configuration
 
-Personal [opencode](https://opencode.ai) configuration: models, TUI theme,
-agents, and commands.
+This directory is **only** the opencode install location: `~/.opencode/bin/opencode`
+is the binary that `which opencode` resolves to, and it is deliberately ignored
+by this repository.
 
-Aligned with the sibling configs so the four coding agents behave the same way:
-[claude-config](https://github.com/ThbltLmr/claude-config),
-[codex-config](https://github.com/ThbltLmr/codex-config), and pi-config.
+The configuration itself lives in **`~/.config/opencode`**, opencode's documented
+global config directory. It is currently *not* under version control.
 
-## What is here
+## Why the move
+
+opencode resolves project config by walking up from the cwd **to the worktree
+root**, not to `$HOME`. A `.opencode` directory in the home directory is
+therefore only picked up when the cwd is `$HOME` itself, so the config that used
+to live here never applied to real projects.
+
+Confirm what is actually loaded with:
+
+```bash
+opencode debug config    # resolved config
+opencode debug skill     # resolved skills, with the file each came from
+```
+
+## What is in ~/.config/opencode
 
 - `opencode.json` — `anthropic/claude-opus-5` at the `high` reasoning variant,
   Haiku 4.5 as the small model, session sharing disabled, and a read-permission
   deny-list for `.env` files, `secrets/`, and `credentials*`.
 - `tui.json` — Catppuccin Frappe, matching Codex and Pi.
-- `AGENTS.md` — global instructions: which subagent tier to reach for, and no
-  tool attribution in commits. Wired in through `instructions`.
-- `agent/code-reviewer.md` — the read-only, high-effort reviewer that also
-  exists as a Claude Code subagent and a Codex agent.
-- `command/` — the shared slash commands:
-  - `/atomic-commit`
-  - `/catchup`
-  - `/start-code-reviewer`
+- `AGENTS.md` — global instructions, wired in through `instructions`.
+- `skill/` — the model-invoked skills: `agent-browser`, `atomic-commit`.
+- `command/` — the user-invoked slash commands: `/grill-me`, `/teach-me`,
+  `/handoff`, `/catchup`. opencode skills have no invocation-control frontmatter,
+  so commands are how a user-only entry point is expressed here.
+- `plugins/herdr-agent-state.js` — herdr session-state integration.
 
-## Agent tiers
+Aligned with the sibling configs so the four coding agents behave the same way:
+[claude-config](https://github.com/ThbltLmr/claude-config),
+[codex-config](https://github.com/ThbltLmr/codex-config), and pi-config.
 
-`opencode`'s `task` tool picks a subagent, not a model, so the cost/quality
-tiering lives on the agents themselves:
+## External skills
 
-| Tier    | Agent           | Model                       |
-| ------- | --------------- | --------------------------- |
-| Cheap   | `explore`       | `anthropic/claude-haiku-4-5` |
-| Default | `general`       | session model, `high`       |
-| Highest | `code-reviewer` | `anthropic/claude-opus-5`, `high`, read-only |
-
-`pair-programming` is a primary agent that asks before every edit.
-
-## Shared skills
-
-opencode scans `~/.claude/skills` and `~/.agents/skills` on its own, so the
-skills versioned in the Claude and Codex configs (`grill-me`, `teach-me`,
-`handoff`, `pr-comments-triage`, `writing-great-skills`, `agent-browser`) are
-already available here. Nothing to symlink. Verify with:
-
-```bash
-opencode debug skill
-```
-
-## Two directories
-
-opencode's documented global config directory is `~/.config/opencode`, but it
-also walks up from the cwd collecting `.opencode` directories, so this
-repository is loaded for every project under `$HOME`. Confirm with
-`opencode debug config` from inside a project.
-
-`~/.config/opencode` is left to tool-managed state that should not be versioned:
-the `peon-ping` sound plugin and, if installed, the herdr agent-state plugin
-(`herdr integration install opencode`).
-
-`~/.opencode/bin/opencode` is the installed binary and is deliberately ignored.
+opencode also auto-scans `~/.claude/skills` and `~/.agents/skills`, and it
+ignores their `disable-model-invocation` frontmatter — so the user-invoked-only
+skills leak in as model-invocable duplicates. `OPENCODE_DISABLE_EXTERNAL_SKILLS=1`
+is exported from `~/.config/zsh/.zshrc` to suppress both scans.
 
 ## Notes
 
-The repository intentionally uses an allow-list `.gitignore`. Auth, sessions,
-caches, the binary, and `node_modules` remain local and must never be committed.
-
 Config is read once at startup and is not hot-reloaded — restart opencode after
-editing anything here.
+editing anything.
