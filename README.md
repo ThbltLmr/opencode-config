@@ -15,7 +15,7 @@ Aligned with the sibling configs so the four coding agents behave the same way:
   `pair-programming`, a primary agent that asks before every edit.
 - `tui.json` — Catppuccin Frappe, matching Codex and Pi.
 - `AGENTS.md` — global instructions, wired in through `instructions`.
-- `skill/` — model-invoked skills: `agent-browser`, `atomic-commit`.
+- `skill/` — model-invoked skills: `agent-browser`, `atomic-commit`, `unslop`.
 - `command/` — user-invoked slash commands: `/grill-me`, `/teach-me`,
   `/handoff`, `/catchup`. opencode skills have no invocation-control
   frontmatter, so a command is how a user-only entry point is expressed here.
