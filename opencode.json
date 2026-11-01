@@ -1,34 +1,20 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "system",
-  "autoupdate": false,
   "model": "anthropic/claude-opus-5",
-  "small_model": "anthropic/claude-haiku-4-5",
   "share": "disabled",
-  "disabled_providers": [
-    "amazon-bedrock"
-  ],
   "instructions": [
     "~/.config/opencode/AGENTS.md"
   ],
-  "permission": {
-    "read": {
-      "*": "allow",
-      "**/.env": "deny",
-      "**/.env.*": "deny",
-      "**/secrets/**": "deny",
-      "**/credentials*": "deny"
-    }
-  },
-  "agent": {
+  "update": "disable",
+  "agents": {
     "build": {
-      "variant": "high"
+      "model": "anthropic/claude-opus-5#high"
     },
     "plan": {
-      "variant": "high"
+      "model": "anthropic/claude-opus-5#high"
     },
     "general": {
-      "variant": "high"
+      "model": "anthropic/claude-opus-5#high"
     },
     "explore": {
       "model": "anthropic/claude-haiku-4-5"
@@ -36,10 +22,56 @@
     "pair-programming": {
       "mode": "primary",
       "description": "Primary agent that proposes every edit for approval before touching the working tree.",
-      "variant": "high",
-      "permission": {
-        "edit": "ask"
-      }
+      "permissions": [
+        {
+          "action": "edit",
+          "resource": "*",
+          "effect": "ask"
+        }
+      ],
+      "model": "anthropic/claude-opus-5#high"
+    },
+    "title": {
+      "model": "anthropic/claude-haiku-4-5"
     }
-  }
+  },
+  "permissions": [
+    {
+      "action": "read",
+      "resource": "*",
+      "effect": "allow"
+    },
+    {
+      "action": "read",
+      "resource": "**/.env",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/.env.*",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/secrets/**",
+      "effect": "deny"
+    },
+    {
+      "action": "read",
+      "resource": "**/credentials*",
+      "effect": "deny"
+    },
+    {
+      "action": "external_directory",
+      "resource": "*",
+      "effect": "ask"
+    }
+  ],
+  "policies": [
+    {
+      "action": "provider.use",
+      "resource": "amazon-bedrock",
+      "effect": "deny"
+    }
+  ]
 }

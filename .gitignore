@@ -23,3 +23,9 @@
 !plugins/**
 !themes/
 !themes/**
+
+# OpenCode 2 terminal settings and Herdr integration.
+!cli.json
+!herdr-tui-session.js
+!herdr-opencode/
+!herdr-opencode/**
